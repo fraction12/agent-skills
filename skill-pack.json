@@ -1,0 +1,98 @@
+{
+  "name": "agent-skills",
+  "version": "0.1.0",
+  "description": "Portable, agent-agnostic skill pack for coding and product-development agents.",
+  "schema": "https://agent-skills.dev/schemas/skill-pack.v0.json",
+  "entrypoint": "SKILL.md",
+  "skills": [
+    {
+      "id": "clean-pytest",
+      "name": "clean-pytest",
+      "entry": "SKILL.md",
+      "description": "Write clean, maintainable pytest tests using Fake-based testing, contract testing, and dependency injection patterns. Use when setting up test suites for Python/MCP projects, creating Fakes for external dependencies, writing contract tests, or implementing test patterns with fixtures and parametrization."
+    },
+    {
+      "id": "code-review",
+      "name": "code-review",
+      "entry": "SKILL.md",
+      "description": "Systematic code review patterns covering security, performance, maintainability, correctness, and testing \u2014 with severity levels, structured feedback guidance, review process, and anti-patterns to avoid. Use when reviewing PRs, establishing review standards, or improving review quality."
+    },
+    {
+      "id": "docker-compose",
+      "name": "Docker Compose",
+      "entry": "SKILL.md",
+      "description": "Define multi-container applications with proper dependency handling, networking, and volume management."
+    },
+    {
+      "id": "fastapi-patterns",
+      "name": "fastapi-patterns",
+      "entry": "SKILL.md",
+      "description": "Production FastAPI patterns with Pydantic v2, async endpoints, OAuth2/JWT, dependency injection, testing, and Kubernetes deployment"
+    },
+    {
+      "id": "flyio",
+      "name": "flyio",
+      "entry": "SKILL.md",
+      "description": "Manage Fly.io apps using the flyctl CLI \u2014 deploy, scale, monitor, manage secrets, SSH, volumes, and networking. Use when the user asks about deploying to Fly, checking Fly app status, viewing Fly logs, managing Fly secrets/env vars, scaling Fly machines, SSH into Fly machines, managing Fly volumes, or any Fly.io infrastructure task. Triggers on mentions of Fly.io, fly deploy, fly status, fly logs, fly secrets, fly scale, or flyctl."
+    },
+    {
+      "id": "frontend-design-3",
+      "name": "frontend-design",
+      "entry": "SKILL.md",
+      "description": "Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when building web components, pages, or applications. Generates creative, polished code that avoids generic AI aesthetics."
+    },
+    {
+      "id": "github",
+      "name": "github",
+      "entry": "SKILL.md",
+      "description": "Use gh for GitHub issues, PR status, CI/logs, comments, reviews, releases, and API queries."
+    },
+    {
+      "id": "improve-codebase-architecture",
+      "name": "improve-codebase-architecture",
+      "entry": "SKILL.md",
+      "description": "Find deepening opportunities in a codebase, informed by the domain language in CONTEXT.md and the decisions in docs/adr/. Use when the user wants to improve architecture, find refactoring opportunities, consolidate tightly-coupled modules, or make a codebase more testable and AI-navigable."
+    },
+    {
+      "id": "nextjs",
+      "name": "NextJS",
+      "entry": "SKILL.md",
+      "description": "Build Next.js 15 apps with App Router, server components, caching, auth, and production patterns."
+    },
+    {
+      "id": "openspec",
+      "name": "openspec",
+      "entry": "SKILL.md",
+      "description": "Spec-driven development with OpenSpec CLI. Use when building features, migrations, refactors, or any structured development work. Manages proposal \u2192 specs \u2192 design \u2192 tasks \u2192 implementation workflows. Supports custom schemas (TDD, rapid, etc.). Trigger on requests involving feature planning, spec writing, change management, or when /opsx commands are mentioned."
+    },
+    {
+      "id": "shadcn-ui",
+      "name": "shadcn-ui",
+      "entry": "SKILL.md",
+      "description": "Use when building UI with shadcn/ui components, Tailwind CSS layouts, form patterns with react-hook-form and zod, theming, dark mode, sidebar layouts, mobile navigation, or any shadcn component question."
+    },
+    {
+      "id": "sqlite",
+      "name": "SQLite",
+      "entry": "SKILL.md",
+      "description": "Use SQLite correctly with proper concurrency, pragmas, and type handling."
+    },
+    {
+      "id": "typescript",
+      "name": "TypeScript",
+      "entry": "SKILL.md",
+      "description": "Write type-safe TypeScript with proper narrowing, inference patterns, and strict mode best practices."
+    }
+  ],
+  "targets": {
+    "codex": {
+      "installPath": "~/.codex/skills"
+    },
+    "openclaw": {
+      "installPath": "~/.openclaw/workspace/skills"
+    },
+    "generic": {
+      "installPath": "<agent-skills-dir>"
+    }
+  }
+}
