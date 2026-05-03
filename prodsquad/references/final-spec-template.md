@@ -17,6 +17,10 @@ Use this when no native spec system exists, or as a checklist for native artifac
 
 ## Chosen Approach
 
+## Decision Log / Rationale
+
+## Rejected Alternatives
+
 ## UX / User Flow
 
 ## Requirements
@@ -69,6 +73,7 @@ The final spec is not done until:
 - implementation notes reflect codebase research
 - acceptance criteria are specific
 - test plan is actionable
+- decision rationale and rejected alternatives are captured
 - open questions are visible
 - tasks can be executed by a coding agent
 ```

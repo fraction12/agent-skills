@@ -15,6 +15,7 @@ Check:
 - [ ] Goals are explicit
 - [ ] Non-goals are explicit
 - [ ] Chosen approach is justified
+- [ ] Decision rationale is captured
 - [ ] Alternatives/tradeoffs are captured
 - [ ] Success metrics or signals exist
 - [ ] Rollout/MVP boundary is clear
@@ -101,6 +102,9 @@ If using OpenSpec, check:
 -
 
 ### Requirements/test gaps
+-
+
+### Missing decision-grilling questions
 -
 
 ### Recommended fixes before build

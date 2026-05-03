@@ -69,7 +69,7 @@
       "id": "prodsquad",
       "name": "prodsquad",
       "entry": "SKILL.md",
-      "description": "Run a staged product squad process for feature ideas, bugs, UX improvements, experiments, or vague product requests. Use when the user wants to turn a product idea or bug into a researched, UX-shaped, engineering-informed spec using the workspace's native spec system, especially OpenSpec when present."
+      "description": "Run a grilled product squad process for feature ideas, bugs, UX improvements, experiments, or vague product requests. Use when the user wants to turn an idea or bug into a deeply understood, researched, UX-shaped, engineering-informed spec using the workspace's native spec system, especially OpenSpec when present."
     },
     {
       "id": "shadcn-ui",

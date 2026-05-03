@@ -8,7 +8,7 @@ Move from proposed solution to underlying user job, then to researched options, 
 
 ## Intake Questions
 
-Ask only what unlocks the next step. Prefer 1–2 questions at a time.
+Ask only what unlocks the next step. Prefer one question at a time. For each question, provide your recommended answer and wait for feedback before continuing when human judgment is needed.
 
 High-value questions:
 
@@ -20,6 +20,10 @@ High-value questions:
 - What would success look like?
 - What must not change?
 - Is this for MVP, power users, admins, internal ops, or everyone?
+
+## Grilled Intent Rule
+
+Phase 1 should feel like a serious interview. Do not move on until the real user/job, pain, desired outcome, assumptions, constraints, and success signal are understood. If the answer exists in the repo, docs, or web, inspect instead of asking.
 
 ## Intent Brief Template
 
@@ -33,6 +37,8 @@ High-value questions:
 **Desired outcome:**
 **Success signal:**
 **Initial assumptions:**
+**Decisions/rationale:**
+**Rejected alternatives:**
 **Open questions:**
 ```
 
@@ -54,6 +60,10 @@ After research and direction selection, clarify:
 - success metrics
 - rollout notes
 
+## Product Shape Grilling
+
+Before finalizing Product Shape, grill the important boundaries: why this MVP, why these non-goals, why this primary flow, and what tradeoffs are accepted.
+
 ## Product Shape Template
 
 ```markdown
@@ -72,6 +82,8 @@ After research and direction selection, clarify:
 **Important edge cases:**
 **Success metrics:**
 **Rollout notes:**
+**Decision rationale:**
+**Rejected alternatives:**
 ```
 
 ## Feature Anti-Patterns

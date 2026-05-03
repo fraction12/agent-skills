@@ -1,13 +1,13 @@
 ---
 name: prodsquad
-description: Run a staged product squad process for feature ideas, bugs, UX improvements, experiments, or vague product requests. Use when the user wants to turn a product idea or bug into a researched, UX-shaped, engineering-informed spec using the workspace's native spec system, especially OpenSpec when present.
+description: Run a grilled product squad process for feature ideas, bugs, UX improvements, experiments, or vague product requests. Use when the user wants to turn an idea or bug into a deeply understood, researched, UX-shaped, engineering-informed spec using the workspace's native spec system, especially OpenSpec when present.
 ---
 
 # ProdSquad
 
-ProdSquad turns feature ideas and bugs into build-ready specs by guiding the user through product discovery, research, UX shaping, engineering fit, and native spec artifact creation.
+ProdSquad turns feature ideas and bugs into build-ready specs by grilling the user through product discovery, research, UX shaping, engineering fit, and native spec artifact creation.
 
-It is not “write a spec immediately.” It is the product-thinking layer before and around the spec.
+It is not “write a spec immediately.” It is the product-thinking layer before and around the spec: relentless clarification first, then researched decisions, then native artifacts.
 
 ```text
 classify → uncover intent → research options → choose direction
@@ -17,14 +17,16 @@ classify → uncover intent → research options → choose direction
 
 ## Core Rules
 
-1. **Do not accept the proposed solution at face value.** Find the underlying user goal, pain, workflow, or job-to-be-done.
-2. **Do not jump straight to implementation.** Discovery comes first.
-3. **Do not produce the final spec until product, UX, and engineering fit have all been considered.**
-4. **Use the workspace's native spec system.** Detect OpenSpec or other conventions before inventing a format.
-5. **Research before recommending.** Use web search, web fetch, browser, docs, and codebase research whenever available and relevant. For current products, competitors, APIs, libraries, pricing, policies, standards, laws, market facts, UX patterns, or implementation approaches, live research is mandatory unless the user explicitly says not to browse.
-6. **Ask only high-leverage questions.** One or two sharp questions beat a giant PM questionnaire.
-7. **Keep the user in the loop at phase gates.** Present options and tradeoffs, then let the user choose direction before locking the spec.
-8. **Make the final output buildable.** A competent coding agent should be able to implement without guessing.
+1. **Grill before specifying.** Interview the user relentlessly about what they actually want before accepting the proposed solution.
+2. **Ask one question at a time.** Do not dump a questionnaire. Walk the decision tree branch by branch and wait for feedback before continuing.
+3. **Provide a recommended answer with every question.** Make it easy for the user to say “yes,” correct you, or expose a hidden assumption.
+4. **If repo/docs/web can answer it, inspect first.** Do not ask the user to explain facts already available in the codebase, docs, product pages, API docs, or web.
+5. **Do not jump straight to implementation.** Discovery and decision clarity come first.
+6. **Do not produce the final spec until product, UX, and engineering fit have all been considered and grilled.**
+7. **Use the workspace's native spec system.** Detect OpenSpec or other conventions before inventing a format.
+8. **Research before recommending.** Use web search, web fetch, browser, docs, and codebase research whenever available and relevant. For current products, competitors, APIs, libraries, pricing, policies, standards, laws, market facts, UX patterns, or implementation approaches, live research is mandatory unless the user explicitly says not to browse.
+9. **Keep the user in the loop at phase gates.** Present options and tradeoffs, grill the unresolved decisions, then let the user choose direction before locking the spec.
+10. **Make the final output buildable and explainable.** A competent coding agent should be able to implement without guessing, and the human should understand why each decision was made.
 
 ## When to Use
 
@@ -42,6 +44,42 @@ Use this skill when the user says or implies:
 Do **not** use for trivial one-line fixes unless the user asks for product/spec work.
 
 
+
+## Grilled Discovery Discipline
+
+ProdSquad uses the Grill Me pattern as its operating style, not as an optional mode. The first serious phase is an intent grill, and every later checkpoint grills the decisions that remain unresolved.
+
+### How to grill
+
+- Interview the user relentlessly until there is shared understanding.
+- Ask one question at a time.
+- Walk down each branch of the product/design/engineering decision tree, resolving dependencies between decisions one by one.
+- For every question, provide your recommended answer.
+- Wait for the user's feedback before moving to the next question when the answer requires human judgment.
+- If a question can be answered by exploring the codebase, docs, existing specs, or web, do that instead of asking.
+- If the user's answer creates a new ambiguity, follow that branch before continuing.
+- Keep the conversation moving: ask sharp questions, not bureaucratic forms.
+
+### Where grilling happens
+
+- **Intent discovery:** heavy grilling. Find the real user, job, pain, desired outcome, assumptions, constraints, and success definition.
+- **Research/options:** grill why an option is attractive, what tradeoff is acceptable, and what pattern should be copied or avoided.
+- **Product shaping:** grill MVP boundaries, non-goals, roles, permissions, edge cases, and rollout.
+- **UX/design:** grill states, flows, labels, failure modes, accessibility, and what the user must understand at each step.
+- **Engineering fit:** grill implementation assumptions, data/API shape, migrations, dependencies, risks, and tests.
+- **Spec review:** grill whether each requirement is testable and whether every major decision has rationale.
+
+### What the grilling should produce
+
+By the time the final spec is written, the conversation and artifact should preserve:
+
+- the real problem behind the request
+- decisions made
+- rationale for each major decision
+- rejected alternatives
+- tradeoffs accepted
+- unresolved questions
+- repo/docs/web facts discovered instead of asking the user
 
 ## Web and Research Tool Policy
 
@@ -88,7 +126,7 @@ These commands are optional runner conventions. If the agent environment support
 
 | Command | Purpose | Loads |
 |---|---|---|
-| `/prodsquad:intake <idea-or-bug>` | Classify the request and uncover intent before research/spec work. | `feature-process.md` or `bug-process.md` |
+| `/prodsquad:intake <idea-or-bug>` | Classify the request and run the heavy intent grill before research/spec work. | `feature-process.md` or `bug-process.md` |
 | `/prodsquad:research` | Research comparable products, UX patterns, docs, APIs, and market/user expectations. | `research-options.md` |
 | `/prodsquad:options` | Synthesize 3–4 product approaches from current context and recommend one. | `research-options.md` |
 | `/prodsquad:shape` | Turn the chosen option into product scope, non-goals, flows, edge cases, and metrics. | `feature-process.md` |
@@ -99,7 +137,7 @@ These commands are optional runner conventions. If the agent environment support
 
 ### Command Behavior
 
-- `/prodsquad:intake` should not write final artifacts. It produces an Intent Brief or Bug Intent Brief.
+- `/prodsquad:intake` should not write final artifacts. It runs the heavy first grill and produces an Intent Brief or Bug Intent Brief.
 - `/prodsquad:research` should use live research when current external facts matter and should cite sources.
 - `/prodsquad:options` should produce choices, tradeoffs, and a recommendation, then ask the user to choose.
 - `/prodsquad:shape` should assume direction is chosen; if not, ask for the missing decision.
@@ -123,7 +161,7 @@ Accept these natural-language equivalents:
 
 ## Reference Map
 
-Load only what is needed:
+Load only what is needed. All references inherit the grilled discovery discipline from this file: ask one question at a time, provide a recommended answer, and inspect repo/docs/web before asking factual questions.
 
 - Feature ideas: `references/feature-process.md`
 - Bugs: `references/bug-process.md`
@@ -155,17 +193,17 @@ Then load the appropriate reference:
 - feature / UX / experiment / vague thought → `feature-process.md`
 - bug → `bug-process.md`
 
-### Phase 1 — Uncover Intent
+### Phase 1 — Heavy Intent Grill
 
-Find the underlying user job before accepting the requested solution.
+Find the underlying user job before accepting the requested solution. This is the most intense grilling phase. Interview the user one question at a time until the real user, pain, workflow, desired outcome, constraints, assumptions, and success definition are understood. Provide a recommended answer with each question. Inspect repo/docs/web instead of asking factual questions.
 
-Output an **Intent Brief** or **Bug Intent Brief**. If enough context exists, proceed with assumptions and mark them.
+Output an **Intent Brief** or **Bug Intent Brief** that includes decisions, rationale, assumptions, and open questions. If enough context exists, proceed with assumptions and mark them.
 
 ### Phase 2 — Research Options
 
 Use `research-options.md` when the product pattern, market, UX convention, competitor behavior, API, library, or technical facts may matter.
 
-Output 3–4 approaches with tradeoffs and a recommendation. Ask the user to choose, combine, or reject options.
+Output 3–4 approaches with tradeoffs and a recommendation. Grill the choice: ask why the recommended option is acceptable, what tradeoff is unacceptable, and what should be rejected. Ask the user to choose, combine, or reject options before locking direction.
 
 ### Phase 3 — Shape Product Direction
 
@@ -181,27 +219,27 @@ Once direction is chosen, clarify:
 - success metrics
 - rollout notes
 
-Output a **Product Shape**.
+Before outputting the **Product Shape**, grill unresolved decisions one at a time. The Product Shape should include decision rationale and rejected alternatives where relevant.
 
 ### Phase 4 — Draft Product Spec
 
 Create a first product spec draft before deep engineering work.
 
-This draft should be product-complete but not implementation-final. Mark implementation assumptions as pending engineering research.
+This draft should be product-complete but not implementation-final. Mark implementation assumptions as pending engineering research, and include a Decision Log / Rationale section for major choices already grilled.
 
 ### Phase 5 — UX / Design Pass
 
 For user-facing work, load `ux-design-pass.md`.
 
-Work through journey, screens, states, interaction model, copy, accessibility, and whether a wireframe/prototype is needed. Update the spec with the selected UX direction.
+Work through journey, screens, states, interaction model, copy, accessibility, and whether a wireframe/prototype is needed. Grill each meaningful UX decision before locking it. Update the spec with the selected UX direction and rationale.
 
 ### Phase 6 — Engineering Fit
 
 Load `engineering-fit.md`.
 
-Inspect the local codebase and relevant external docs. Determine architecture, data/API impact, abstractions, tests, risks, and rejected approaches.
+Inspect the local codebase and relevant external docs. Determine architecture, data/API impact, abstractions, tests, risks, and rejected approaches. Grill implementation assumptions that require human judgment; inspect code/docs for factual answers.
 
-Update the spec to be implementation-informed.
+Update the spec to be implementation-informed, including rejected approaches and engineering rationale.
 
 ### Phase 7 — Native Spec Artifact
 
@@ -240,18 +278,19 @@ Audit the existing change for product, UX, engineering, acceptance, and task gap
 
 Do not skip gates unless the user explicitly asks for a lightweight pass.
 
-1. **Intent understood** — user/job, pain, desired outcome, assumptions.
-2. **Options researched** — 3–4 plausible approaches, tradeoffs, recommendation, chosen direction.
-3. **Product shape agreed** — scope, non-goals, flow, edge cases, success criteria.
-4. **UX direction selected** — journey, states, interaction model for user-facing work.
-5. **Engineering fit researched** — codebase fit, implementation approach, tests, risks.
-6. **Spec completed** — native artifacts are clear, testable, and build-ready.
+1. **Intent grilled** — user/job, pain, desired outcome, assumptions, constraints, success definition, and rationale.
+2. **Options researched and grilled** — 3–4 plausible approaches, tradeoffs, recommendation, chosen direction, and rejected alternatives.
+3. **Product shape grilled** — scope, non-goals, flow, edge cases, success criteria, and why those boundaries were chosen.
+4. **UX direction grilled** — journey, states, interaction model, copy/accessibility implications, and rationale for user-facing work.
+5. **Engineering fit grilled** — codebase fit, implementation approach, tests, risks, rejected approaches, and open decisions.
+6. **Spec completed** — native artifacts are clear, testable, build-ready, and include enough decision rationale that the human and agent share context.
 
 ## Conversation Style
 
 - Stay collaborative and decisive.
-- Ask one or two sharp questions when blocked.
-- If not blocked, proceed and state assumptions.
+- Ask one sharp question at a time when a decision needs human judgment.
+- Provide your recommended answer with each question.
+- If not blocked, inspect repo/docs/web, proceed, and state assumptions.
 - Present options as decisions, not as raw research dumps.
 - Keep the user involved at direction-selection moments.
 - Do not bury the recommendation.
@@ -275,20 +314,21 @@ Use when a spec already exists. Audit for missing goals, non-goals, UX states, e
 Before calling the work done:
 
 - [ ] Workspace/spec system detected
-- [ ] Intent brief completed
+- [ ] Intent grill completed
 - [ ] Research performed or explicitly deemed unnecessary
-- [ ] Options presented and direction selected
-- [ ] Product scope/non-goals clarified
-- [ ] UX/design pass completed when user-facing
-- [ ] Engineering/codebase research completed
+- [ ] Options presented, grilled, and direction selected
+- [ ] Product scope/non-goals grilled and clarified
+- [ ] UX/design pass completed and grilled when user-facing
+- [ ] Engineering/codebase research completed and assumptions grilled
 - [ ] Native spec artifacts created/updated
 - [ ] Requirements are testable
 - [ ] Tasks are actionable
 - [ ] Validation command identified or run
+- [ ] Decision rationale and rejected alternatives are captured
 - [ ] Open questions are explicit
 
 ## Short Form
 
 If asked what ProdSquad does, say:
 
-> ProdSquad turns feature ideas and bugs into build-ready specs by uncovering the real user goal, researching product options, shaping the chosen direction, designing the UX, researching engineering fit, and writing the final spec in the workspace's native spec system.
+> ProdSquad turns feature ideas and bugs into build-ready specs by grilling the user until the real goal and decisions are understood, researching product options, shaping the chosen direction, designing the UX, researching engineering fit, and writing the final spec in the workspace's native spec system with decision rationale preserved.

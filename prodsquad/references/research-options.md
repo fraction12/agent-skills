@@ -72,9 +72,12 @@ Use live web research for current products, APIs, libraries, pricing, policies, 
 
 ### Recommendation
 <Clear recommendation with rationale.>
+
+### Decision Questions
+- <One sharp question at a time, each with a recommended answer.>
 ```
 
-After presenting options, ask the user to choose, combine, or reject them.
+After presenting options, grill the choice one decision at a time: why this option, why not the simpler one, what tradeoff is acceptable, and what should be explicitly rejected. Ask the user to choose, combine, or reject them before locking direction.
 
 ## Research Anti-Patterns
 

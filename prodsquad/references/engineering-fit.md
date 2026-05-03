@@ -1,6 +1,6 @@
 # Engineering Fit
 
-Use this after the product direction and UX are shaped. The goal is to update the spec with implementation reality.
+Use this after the product direction and UX are shaped. The goal is to update the spec with implementation reality and grill any engineering decision that needs human judgment.
 
 ## Local Codebase Inspection
 
@@ -34,6 +34,10 @@ Use web search/fetch/browser tools to check current docs for:
 - migration/version behavior
 - known issues
 
+## Engineering Grilling Rule
+
+Inspect code/docs first. Grill only the decisions that require judgment: abstraction choice, migration tolerance, dependency appetite, performance/security tradeoffs, and test confidence. Ask one question at a time and provide a recommended answer.
+
 ## Questions to Answer
 
 - What is the simplest correct implementation path?
@@ -60,6 +64,7 @@ Use web search/fetch/browser tools to check current docs for:
 **Testing strategy:**
 **Risks:**
 **Rejected approaches:**
+**Decision rationale:**
 **Open engineering questions:**
 ```
 

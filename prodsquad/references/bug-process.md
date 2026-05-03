@@ -4,7 +4,7 @@ Use this when actual behavior differs from expected behavior and the user wants 
 
 ## Intake Questions
 
-Ask or infer:
+Ask or infer one question at a time. Provide your recommended answer when useful. Inspect logs/code/docs instead of asking for facts the repo can answer.
 
 - What was expected?
 - What actually happened?
@@ -28,6 +28,7 @@ Ask or infer:
 **Severity:**
 **Known workaround:**
 **Recent related changes:**
+**Root decision/rationale:**
 **Open questions:**
 ```
 

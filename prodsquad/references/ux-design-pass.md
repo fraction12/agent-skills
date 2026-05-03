@@ -2,6 +2,10 @@
 
 Use this for user-facing changes after the base product direction is clear.
 
+## UX Grilling Rule
+
+For every meaningful UX choice, ask why this flow/state/copy is right and what it implies for the user. Ask one question at a time and provide a recommended answer. Inspect existing UI patterns before asking factual questions.
+
 ## UX Questions
 
 Consider:
@@ -61,6 +65,11 @@ Include states as relevant:
 
 ### Recommended UX
 <Recommendation and why.>
+
+### UX Decision Rationale
+- Decision:
+- Why:
+- Rejected alternatives:
 ```
 
 ## Prototype / Wireframe Choices
