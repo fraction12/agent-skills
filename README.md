@@ -1,56 +1,37 @@
 # Agent Skills
 
-Portable, agent-agnostic skill pack for coding and product-development agents.
+Reusable Agent Skills by Dushyant Garg.
 
-Each skill is a self-contained directory with a `SKILL.md` entrypoint. Skills may include references, scripts, or assets, but the canonical contract is deliberately simple so the pack can move between agents.
+This repository is structured for Codex Marketplace / Agent Skills submissions.
 
-## Current skills
+## Submit individual skills
 
-See `skill-pack.json` for the machine-readable manifest.
+Use a direct `skills/<name>` target, for example:
 
-## Install
+- `fraction12/agent-skills/skills/keepcoding`
+- `fraction12/agent-skills/skills/code-review`
+- `fraction12/agent-skills/skills/openspec`
+- `fraction12/agent-skills/skills/prodsquad`
+- `fraction12/agent-skills/skills/improve-codebase-architecture`
 
-Copy all skills into Codex:
+## Available skills
 
-```bash
-scripts/install-skills.sh codex
-```
+- `clean-pytest`
+- `code-review`
+- `docker-compose`
+- `fastapi-patterns`
+- `flyio`
+- `frontend-design`
+- `github`
+- `improve-codebase-architecture`
+- `keepcoding`
+- `nextjs`
+- `openspec`
+- `prodsquad`
+- `shadcn-ui`
+- `sqlite`
+- `typescript`
 
-Copy all skills into OpenClaw:
+## Layout
 
-```bash
-scripts/install-skills.sh openclaw
-```
-
-Install into any agent skill directory:
-
-```bash
-scripts/install-skills.sh /path/to/agent/skills
-```
-
-Use symlinks instead of copies:
-
-```bash
-MODE=symlink scripts/install-skills.sh codex
-```
-
-## Skill contract
-
-Required:
-
-```text
-skill-name/
-  SKILL.md
-```
-
-Recommended:
-
-```text
-skill-name/
-  SKILL.md
-  references/   # optional docs loaded only when needed
-  scripts/      # optional deterministic helper scripts
-  assets/       # optional templates/static assets used in outputs
-```
-
-Keep skills runner-neutral where possible. Runner-specific metadata files may exist for compatibility, but `SKILL.md` is the source of truth.
+Each skill lives under `skills/<skill-name>/SKILL.md`.

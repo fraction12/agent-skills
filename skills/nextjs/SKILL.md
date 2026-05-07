@@ -1,5 +1,5 @@
 ---
-name: NextJS
+name: nextjs
 slug: nextjs
 version: 1.1.0
 homepage: https://clawic.com/skills/nextjs
