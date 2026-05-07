@@ -24,6 +24,12 @@
       "description": "Define multi-container applications with proper dependency handling, networking, and volume management."
     },
     {
+      "id": "domain-model",
+      "name": "domain-model",
+      "entry": "SKILL.md",
+      "description": "Grilled planning against a repo's domain model. Use when the user wants to stress-test a feature, plan, architecture, data model, or product direction against the project's language, CONTEXT.md, CONTEXT-MAP.md, docs/adr/, and actual code. Sharpens terminology and records domain terms/ADRs when decisions crystallize."
+    },
+    {
       "id": "fastapi-patterns",
       "name": "fastapi-patterns",
       "entry": "SKILL.md",

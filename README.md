@@ -19,6 +19,7 @@ Use a direct `skills/<name>` target, for example:
 - `clean-pytest`
 - `code-review`
 - `docker-compose`
+- `domain-model`
 - `fastapi-patterns`
 - `flyio`
 - `frontend-design`
