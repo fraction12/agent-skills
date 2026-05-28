@@ -54,6 +54,12 @@
       "description": "Use gh for GitHub issues, PR status, CI/logs, comments, reviews, releases, and API queries."
     },
     {
+      "id": "html-diagrams",
+      "name": "html-diagrams",
+      "entry": "SKILL.md",
+      "description": "Create polished, portable single-file HTML diagrams for workflows, systems, architectures, maps, timelines, and visual explanations."
+    },
+    {
       "id": "improve-codebase-architecture",
       "name": "improve-codebase-architecture",
       "entry": "SKILL.md",

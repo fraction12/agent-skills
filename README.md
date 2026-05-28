@@ -24,6 +24,7 @@ Use a direct `skills/<name>` target, for example:
 - `flyio`
 - `frontend-design`
 - `github`
+- `html-diagrams`
 - `improve-codebase-architecture`
 - `keepcoding`
 - `nextjs`
