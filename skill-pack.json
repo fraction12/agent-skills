@@ -84,6 +84,12 @@
       "description": "Run a grilled product squad process for feature ideas, bugs, UX improvements, experiments, or vague product requests. Use when the user wants to turn an idea or bug into a deeply understood, researched, UX-shaped, engineering-informed spec using the workspace's native spec system, especially OpenSpec when present."
     },
     {
+      "id": "research-figures",
+      "name": "research-figures",
+      "entry": "SKILL.md",
+      "description": "Create research-paper-grade figures and charts from benchmark, experiment, CSV/JSON, or paper-context data. Use when the user asks for publication-quality plots, ML-systems paper figures, multi-panel charts, Matplotlib/Seaborn figures, academic plotting, paper-style graphs, figure panels, camera-ready chart exports, or asks to match a provided research-paper chart style."
+    },
+    {
       "id": "shadcn-ui",
       "name": "shadcn-ui",
       "entry": "SKILL.md",

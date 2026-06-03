@@ -30,6 +30,7 @@ Use a direct `skills/<name>` target, for example:
 - `nextjs`
 - `openspec`
 - `prodsquad`
+- `research-figures`
 - `shadcn-ui`
 - `sqlite`
 - `typescript`

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Research Figures"
+  short_description: "Paper-grade ML figures with strict visual QA."
+  default_prompt: "Use $research-figures to make a paper-style multi-panel figure with shared legend, vector exports, and no text overlap."
+policy:
+  allow_implicit_invocation: true
