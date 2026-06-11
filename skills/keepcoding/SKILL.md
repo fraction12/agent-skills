@@ -1,24 +1,27 @@
 ---
 name: keepcoding
-description: Run long-running implementation work from a pre-written task list, spec document, or existing OpenSpec change. Use when the user invokes /keepcoding or $keepcoding, asks Codex to keep coding through a spec, or wants phased implementation with a temporary phase plan, subagents, commits, code review, spec/task updates, Linear updates, and final UAT. Refuse implementation when no pre-written spec/change/task list is supplied or discoverable.
+description: Run long-running implementation work from a pre-written task list, spec document, or existing OpenSpec change. Use when the user invokes /keepcoding or $keepcoding, asks Codex to keep coding through a spec, or wants dependency-aware waves of parallel vertical slices with a temporary phase plan, subagents, commits, code review, spec/task updates, Linear updates, and final UAT. Refuse implementation when no pre-written spec/change/task list is supplied or discoverable.
 ---
 
 # Keepcoding
 
 ## Overview
 
-Use this skill to drive a repo through a supplied implementation spec in small, reviewable phases. The skill is an execution loop: confirm inputs, phase the existing spec, implement each phase with agents, commit, review, fix, update tracking, and finish with full UAT.
+Use this skill to drive a repo through a supplied implementation spec in dependency-aware waves of small vertical slices. The skill is an execution loop: confirm inputs, build a temporary execution plan from the existing spec, run independent slices in parallel with agents, integrate, verify, commit, review, fix, update tracking, and finish with full UAT.
 
 Do not create the initial product/spec/OpenSpec change for the user. If the user has not supplied an already-written source of truth, stop and ask for one.
 
 ## Operating Principles
 
 - Treat the skill file as executable workflow, not background reading.
-- Build vertical tracer-bullet phases: each phase should produce a narrow behavior that is demoable or verifiable end-to-end.
-- Avoid horizontal phases such as "database work", "API work", then "UI work" unless the supplied spec explicitly requires that order.
-- Prefer many small AFK phases over a few large phases. Mark a phase HITL only when it needs a human decision, taste judgment, credentials, production approval, or irreversible architectural choice.
+- Build vertical tracer-bullet slices: each slice should produce a narrow behavior that is demoable or verifiable end-to-end.
+- Group independent vertical slices into parallel waves. Serialize only when a dependency, file ownership conflict, or integration risk makes parallel work unsafe.
+- Avoid horizontal slices such as "database work", "API work", then "UI work" unless the supplied spec explicitly requires that order.
+- Prefer many small AFK slices over a few large slices. Mark a slice HITL only when it needs a human decision, taste judgment, credentials, production approval, or irreversible architectural choice.
 - Keep the user's supplied spec as the contract. Use a temporary phase plan as the execution ledger.
 - Use the supplied OpenSpec change/spec vocabulary and local code conventions. Do not broaden the source of truth by defaulting to ambient repo docs.
+- The main agent is the scheduler and integrator. Subagents build and review assigned slices; the main agent owns the dependency graph, temp plan, commits, source tracking, Linear updates, and final UAT.
+- Do not require or maintain a Codex task/progress UI mirror. Progress lives in the temp phase plan, git commits, source spec tasks, Linear updates, and the final report.
 - Stage intentionally. Never use broad staging commands such as `git add -A` unless the user explicitly requested that style and the worktree is clean except for this skill's changes.
 - Before execution, converse with the user until required human inputs are collected. Ask focused questions one at a time, include a recommended answer, and record decisions in the temp plan.
 
@@ -33,14 +36,14 @@ At the start, identify the source spec before doing implementation work. Accept 
 Refuse to proceed when the user only gives an idea, goal, vague feature request, or asks Codex to invent the spec. Use a concise refusal:
 
 ```text
-/keepcoding needs a pre-written spec, task list, or existing OpenSpec change before implementation. Send me the change name/path, spec file, task list, or Linear ticket with acceptance criteria, and I can run the phased build loop from that.
+/keepcoding needs a pre-written spec, task list, or existing OpenSpec change before implementation. Send me the change name/path, spec file, task list, or Linear ticket with acceptance criteria, and I can run the wave/slice build loop from that.
 ```
 
 After finding a valid spec, ask one focused kickoff confirmation unless the user already gave the answers:
 
 - Confirm the exact source spec/change/task list to build from.
 - Ask for the Linear ticket/project, if any.
-- Confirm permission to commit each completed phase and review-fix commits automatically.
+- Confirm permission to commit each completed slice and review-fix commits automatically.
 - Confirm whether pushing branches, opening PRs, deploying, or changing production systems is allowed. Default those to no unless explicitly approved.
 
 Use this kickoff shape:
@@ -48,7 +51,7 @@ Use this kickoff shape:
 ```text
 I found the source spec: <path/change/ticket>. I will use it as the contract.
 Linear: <ticket/project or none>.
-Default loop: phase -> implement -> verify -> commit -> fresh review -> fix+commit -> update spec/tasks+Linear.
+Default loop: plan dependency-aware waves -> build independent vertical slices in parallel -> integrate -> verify -> commit -> fresh review -> fix+commit -> update spec/tasks+Linear.
 Please confirm: automatic local commits are OK; push/PR/deploy/prod changes are <allowed/not allowed>.
 ```
 
@@ -101,8 +104,8 @@ Use the temp plan for:
 
 - Upfront context interview questions, answers, and decisions.
 - Preflight blocker scan and decisions cleared by the user.
-- Phase breakdowns, AFK/HITL labels, dependencies, owners, and planned commits.
-- Subagent assignments and returned summaries.
+- Wave and slice breakdowns, AFK/HITL labels, dependencies, owners, statuses, and planned commits.
+- Subagent assignments, ownership boundaries, returned summaries, and integration notes.
 - Validation commands, failures, retries, and skipped checks.
 - Review findings, fixes, and review-fix commits.
 - Linear/spec update state.
@@ -159,11 +162,11 @@ Routine permission checks may be batched in kickoff, but product, domain, archit
 | <question> | <blocked risk> | <user answer or repo evidence> | <how to apply later> |
 ```
 
-Continue until all required execution inputs are collected. Do not begin phase implementation while required interview answers are unresolved. If the question would create or materially change acceptance criteria, return `NEEDS_CONTEXT` and ask for the source spec/change to be revised.
+Continue until all required execution inputs are collected. Do not begin slice implementation while required interview answers are unresolved. If the question would create or materially change acceptance criteria, return `NEEDS_CONTEXT` and ask for the source spec/change to be revised.
 
 ## Preflight Blocker Clearance
 
-After the upfront interview and before phase planning or coding, inspect the supplied spec, repo state, interview decisions, and likely execution path for blockers that would otherwise trigger STOP conditions later. Batch predictable decisions up front so the workflow does not pause randomly for approvals the user could have given at kickoff.
+After the upfront interview and before wave/slice planning or coding, inspect the supplied spec, repo state, interview decisions, and likely execution path for blockers that would otherwise trigger STOP conditions later. Batch predictable decisions up front so the workflow does not pause randomly for approvals the user could have given at kickoff.
 
 Do not use preflight to invent a missing spec. If required behavior or acceptance criteria are absent from the supplied source, return `NEEDS_CONTEXT` and ask for a revised pre-written spec.
 
@@ -190,26 +193,53 @@ Classify each item in the temp plan:
 
 Use preflight to classify risks and apply decisions gathered in the upfront interview. Ask follow-up questions only for new `needs user` and `blocked` items not already resolved. Prefer one focused question at a time for high-risk decisions; batch only routine execution approvals. Include recommended answers and tradeoffs. After the user answers, update the temp plan and treat cleared decisions as standing instructions for this `/keepcoding` run.
 
-If a later phase encounters a blocker already covered by preflight, follow the recorded decision instead of stopping again. Stop only when the blocker is new, materially different, or higher risk than the preflight decision covered.
+If a later slice encounters a blocker already covered by preflight, follow the recorded decision instead of stopping again. Stop only when the blocker is new, materially different, or higher risk than the preflight decision covered.
 
-## Phase Planning
+## Wave And Slice Planning
 
-After the upfront interview and preflight clearance are complete, break the supplied work into small phases in the temporary phase plan. Each phase must have:
+After the upfront interview and preflight clearance are complete, break the supplied work into small vertical slices and group those slices into dependency-aware waves in the temporary phase plan.
 
-- A narrow behavior or system slice.
+Definitions:
+
+- Slice: one vertical, independently reviewable implementation packet.
+- Wave: a batch of ready slices that can run in parallel because they do not depend on each other and do not have unsafe ownership conflicts.
+- Integration boundary: the point where the main agent reviews returned slice work, resolves conflicts, validates behavior, and commits.
+
+Each slice must have:
+
+- A narrow behavior or system outcome.
 - Clear acceptance criteria from the source spec.
 - Expected files/modules or investigation scope.
 - Verification commands or UAT checks.
 - A planned commit boundary.
 - Type: AFK or HITL.
-- Dependencies: blockers that must complete first, or `None`.
+- Dependencies: slices that must complete first, or `None`.
+- Ownership: files/modules/responsibility assigned to the implementation agent.
 
-Prefer phases that can be implemented, reviewed, fixed, and committed independently. Keep unrelated refactors out unless they directly unblock the phase.
+Prefer slices that can be implemented, reviewed, fixed, and committed independently. Keep unrelated refactors out unless they directly unblock a slice.
 
-Use this phase template:
+Do:
+
+- Build a dependency graph before starting implementation.
+- Put all currently-ready independent slices into the same wave.
+- Give each implementation agent a complete vertical outcome, not a layer-only task.
+- Keep worker ownership disjoint unless the temp plan explains the coordination rule.
+- Keep shared contracts, migrations, schema changes, and broad refactors in their own prerequisite slice when they unblock multiple later slices.
+- Record returned worker summaries, validation output, review findings, commits, and remaining risks in the temp plan.
+
+Do not:
+
+- Serialize independent slices just because the written plan is ordered.
+- Start dependent slices before their prerequisite slice has been integrated and verified.
+- Ask two agents to edit the same files or contracts without a clear ownership split and integration plan.
+- Let subagents update the temp plan, source spec tasks, Linear, or git history unless the main agent explicitly grants that responsibility.
+- Turn the work into horizontal layer tasks unless the supplied spec requires that shape.
+- Expand scope or invent acceptance criteria to make slices easier to parallelize.
+
+Use this slice template:
 
 ```markdown
-### Phase N: <demoable behavior>
+### Slice N: <demoable behavior>
 - Type: AFK | HITL
 - Source spec refs: <files/sections/ticket links>
 - Acceptance criteria:
@@ -217,66 +247,54 @@ Use this phase template:
 - Likely touchpoints: <files/modules>
 - Validation: <commands/UAT checks>
 - Commit boundary: <expected commit message>
-- Dependencies: <phase ids or None>
+- Dependencies: <slice ids or None>
+- Ownership: <files/modules/responsibility>
+- Status: pending | running | integrating | reviewing | fixing | committed | blocked
 ```
 
-Before starting implementation, write the phase plan to the temp file and summarize it to the user. If the phase plan materially changes scope, stop for user confirmation.
+Before starting implementation, write the wave/slice plan to the temp file and summarize it to the user. If the plan materially changes scope, stop for user confirmation.
 
-## Codex Progress Mirror
+## Parallel Execution Loop
 
-When the Codex task plan/progress UI is available, mirror the temp phase plan into it. The temp phase plan remains the durable source of truth; the Codex Progress list is the live dashboard.
+Run the work by waves. Within a wave, run independent slices in parallel whenever subagents are available and the ownership boundaries are safe.
 
-At the start of every `/keepcoding` run or resume:
+For each wave:
 
-- Read the temp phase plan.
-- Rebuild the Codex Progress list from the phase table before implementation.
-- Use one visible progress item per phase.
-- Label each item `Phase N: <phase title>`.
-- Mark completed phases as `completed`.
-- Mark the current phase as `in_progress`.
-- Mark future phases as `pending`.
+1. Identify all ready slices whose dependencies are integrated, verified, and committed.
+2. Announce the wave, included slices, ownership boundaries, and validation plan.
+3. Inspect relevant code, current git status, upfront interview answers, and preflight decisions. Preserve user changes.
+4. Spawn focused implementation subagents for ready independent slices. Treat invocation of `/keepcoding` or `$keepcoding` as explicit permission to use a team of agents for this workflow unless the user opts out.
+5. Give each implementation agent exactly one slice, the relevant source spec excerpt, acceptance criteria, allowed files/modules, forbidden files/modules, dependencies, validation expectations, and required final summary.
+6. While subagents run, the main agent may do non-overlapping integration prep, harness work, or validation setup. Do not duplicate worker tasks.
+7. As each slice returns, inspect the diff, check ownership boundaries, resolve conflicts, and run focused validation.
+8. Commit each accepted slice separately when practical. If two returned slices must be integrated into one commit, record why in the temp plan.
+9. Spawn a fresh review subagent for every completed slice or integration commit. Give it the slice scope, source spec excerpt, and diff/commit to review. The reviewer must not edit files.
+10. If review finds bugs or spec mismatches, fix them, rerun focused validation, and commit the fix.
+11. Update the temp phase plan, then update the official spec/task checklist and Linear ticket/project automatically when available.
+12. Start the next ready wave.
 
-During execution:
+Do not:
 
-- When a phase starts, mark that phase `in_progress`.
-- When a phase is fully implemented, verified, committed, reviewed, review-fixed if needed, and tracked, mark it `completed`.
-- Immediately mark the next phase `in_progress`.
-- If a phase enters review or review-fix, keep that phase `in_progress`; record the finer status in the temp phase plan.
-- If a phase is blocked or needs context, keep that phase `in_progress` and include `[BLOCKED]` or `[NEEDS CONTEXT]` in the visible item title.
-
-Because the Codex Progress list supports only one `in_progress` item, only the main current phase should be `in_progress`. Keep parallel subagent status in the temp phase plan.
-
-After every temp phase plan status change, update the Codex Progress list second. After context compaction or a resumed run, reconstruct the Codex Progress list from the temp phase plan rather than trusting UI state to persist.
-
-## Execution Loop
-
-For each phase, run this loop until the phase is complete:
-
-1. Announce the phase, scope, and validation plan.
-2. Inspect the relevant code, current git status, upfront interview answers, and preflight decisions. Preserve user changes.
-3. Use focused implementation subagents when useful and available. Treat invocation of `/keepcoding` or `$keepcoding` as explicit permission to use a team of agents for this workflow unless the user opts out.
-4. Implement the phase in small diffs, following repo conventions.
-5. Run relevant tests, type checks, linters, migrations, or manual checks.
-6. Commit the phase once it passes practical verification.
-7. Spawn a fresh review subagent for every phase. Give it the phase scope, source spec excerpt, and diff/commit to review. The reviewer must not edit files.
-8. If review finds bugs or spec mismatches, fix them, rerun focused validation, and commit the fix.
-9. Update the temp phase plan, then update the Codex Progress mirror, then update the official spec/task checklist and Linear ticket/project automatically when available.
-10. Move to the next phase.
-
-Do not start a later phase if the current phase has unresolved review findings, failed core checks, or unclear acceptance criteria.
+- Start a slice whose dependency has not been integrated, verified, committed, and reviewed.
+- Merge multiple unreviewed worker diffs into one broad commit without an explicit integration reason.
+- Let a subagent decide product scope, acceptance criteria, security posture, data migration policy, production behavior, or Linear status.
+- Continue parallel execution after ownership conflicts, merge conflicts, or failing core checks make the wave unsafe.
+- Treat subagent completion as done. A slice is done only after main-agent inspection, validation, commit, fresh review, review fixes if needed, and tracking updates.
 
 ### Subagent Rules
 
 - Give implementation agents disjoint ownership: files, modules, or responsibility boundaries.
+- Assign one vertical slice per implementation agent. Do not assign vague "help with the backend" or "clean up tests" tasks unless the source spec itself requires that task.
 - Tell every implementation agent that other agents may be editing nearby code and they must not revert unrelated work.
 - Give subagents the relevant source spec excerpt and temp phase plan excerpt. Subagents may read the temp plan but must not edit it.
+- Main agent owns commits in the primary worktree. Do not ask implementation agents to commit unless the execution environment explicitly uses worker-owned branches or worktrees.
 - Do not delegate the immediate blocker if the main agent is waiting on it. Use subagents for parallel work that can complete independently.
-- Review agents are read-only. Use fresh context for each phase review so the reviewer does not inherit implementation bias.
+- Review agents are read-only. Use fresh context for each slice review so the reviewer does not inherit implementation bias.
 
 Use this review prompt shape:
 
 ```text
-Review this phase against the supplied spec. Read the diff/commit and look for bugs, missing acceptance criteria, regressions, security issues, race conditions, data loss, broken UX, and untested edge cases. Do not edit files. Classify each finding as FIXABLE or NEEDS_DECISION. End with: Recommendation: <ship/fix/block> because <specific reason>.
+Review this slice against the supplied spec. Read the diff/commit and look for bugs, missing acceptance criteria, regressions, security issues, race conditions, data loss, broken UX, and untested edge cases. Do not edit files. Classify each finding as FIXABLE or NEEDS_DECISION. End with: Recommendation: <ship/fix/block> because <specific reason>.
 ```
 
 ### STOP Conditions
@@ -287,9 +305,11 @@ Stop and ask the user before continuing when:
 - The supplied spec is too vague to derive acceptance criteria.
 - Required upfront interview answers are unresolved.
 - A temp phase plan cannot be created or made non-committable.
-- A phase needs product, security, architecture, data migration, destructive, production, or credential decisions not already settled by the source spec, upfront interview, or preflight clearance.
+- A slice needs product, security, architecture, data migration, destructive, production, or credential decisions not already settled by the source spec, upfront interview, or preflight clearance.
+- The dependency graph cannot produce safe slices because ownership, order, or acceptance boundaries are unclear.
+- Parallel slice work creates ownership conflicts, merge conflicts, or integration risk that cannot be resolved without touching user work or changing scope.
 - The implementation has failed the same check or fix path three times.
-- Tests fail in a way that appears unrelated to this phase and the cause is not obvious or covered by preflight baseline policy.
+- Tests fail in a way that appears unrelated to this slice and the cause is not obvious or covered by preflight baseline policy.
 - Merge conflicts or dirty worktree changes would require touching user work beyond preflight permission.
 - Verification cannot be run and there is no credible substitute cleared during preflight.
 
@@ -297,25 +317,24 @@ Stop and ask the user before continuing when:
 
 Use git as the progress ledger:
 
-- Commit after each completed phase.
+- Commit after each completed slice or explicit integration boundary.
 - Commit review fixes separately when that improves traceability; amend only when the user or repo convention prefers it.
-- Keep commit messages phase-oriented and specific.
+- Keep commit messages slice-oriented and specific.
 - Do not push, open PRs, deploy, or mutate production without explicit permission.
 - Include only intentional files in each commit.
 - Never include `.codex/keepcoding/` files in commits.
 
-Update tracking after each phase:
+Update tracking after each slice or wave:
 
 - Update the temp phase plan first.
-- Update the Codex Progress mirror second when available.
 - Mark completed items in the provided task/spec artifact.
-- Add concise phase progress to Linear when a ticket/project is provided and tools are available.
+- Add concise slice or wave progress to Linear when a ticket/project is provided and tools are available.
 - If Linear tools are unavailable, keep a ready-to-post update in the working summary.
 - Record blockers, skipped checks, and assumptions immediately rather than waiting for the final summary.
 
 ## Final UAT
 
-After all phases are complete:
+After all waves and slices are complete:
 
 - Run the broadest practical validation suite for the changed system.
 - Perform end-to-end UAT against the source spec's acceptance criteria.
@@ -328,7 +347,7 @@ Finish with a concise report listing:
 
 - Status: `DONE`, `DONE_WITH_CONCERNS`, `BLOCKED`, or `NEEDS_CONTEXT`.
 - Source spec/change used.
-- Phase commits and review-fix commits.
+- Slice commits, integration commits, and review-fix commits.
 - Tests/checks/UAT performed.
 - Spec/task and Linear updates made.
 - Temp phase plan path, deleted or retained.
