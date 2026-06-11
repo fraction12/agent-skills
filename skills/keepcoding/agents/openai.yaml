@@ -1,4 +1,4 @@
 interface:
   display_name: "/keepcoding"
-  short_description: "Run phased long-running implementation"
-  default_prompt: "Use $keepcoding (/keepcoding) to run phased implementation from my pre-written spec or OpenSpec change."
+  short_description: "Run parallel spec-driven coding waves"
+  default_prompt: "Use $keepcoding (/keepcoding) to build my pre-written spec or OpenSpec change through parallel vertical slices."
